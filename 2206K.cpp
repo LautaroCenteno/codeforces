@@ -131,15 +131,20 @@ int check_copy(int n, string s){
     return stk;
 }
 
-int display(int t, string n) {
+int display(int n, string s) {
+    int x = n/4;
+    if(check_0)
+
+
+
     int l = 0;
-    int r = t/4;
+    int r = n/4;
     
-    if(check(r, n)) return r;
+    if(check(r, s)) return r;
     else{
         while(l+1<r){
         int mid = l + (r-1)/2;
-        if(check(mid,n)) l = mid;
+        if(check(mid,s)) l = mid;
         else r = mid;
         }
         return l;
@@ -148,9 +153,15 @@ int display(int t, string n) {
 
 int main() {
     int t;
-    string s;
     cin >> t;
-    cin >> s;
+
+    while (t > 0){
+        int n;
+        string s;
+        cin >> n;
+        cin >> s;
+        t-=1;
+    }
     
     cout << check_copy(t,s);
     /*
