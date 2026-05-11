@@ -85,10 +85,6 @@ int cant_0_9(string s){
     return res;
 }
 
-bool prueba(){
-    return true;
-}
-
 bool check_unos(int x, string s, int n_0, int n_1, int n_2_5, int n_6_9){
     int xt = x;
 
@@ -321,7 +317,7 @@ int display(int n, string s) {
             }
             else{
                 while(l+1<r){
-                    int mid = l + (r-1)/2;
+                    int mid = l + (r-l)/2;
                     if(check_unos(mid,s, n_0, n_1, n_2_5, n_6_9)) l = mid;
                     else r = mid;
                 }
@@ -467,19 +463,15 @@ int display(int n, string s) {
 }
 
 int main() {
-    int n;
-    string s;
-
-    cin >> n;
-    cin >> s;
+    int t;
     
-    cout << display(n,s) << "\n";
-    /*
-    cout << cant_0(s) << "\n";
-    cout << cant_1(s) << "\n";
-    cout << cant_2_5(s) << "\n";
-    cout << cant_6_9(s) << "\n";
+    cin >> t;
     
-    cout << check_unos(0,s,cant_0(s),cant_1(s),cant_2_5(s),cant_6_9(s)) << "\n";
-    */
+    while(t--){
+        int n;
+        string s;
+        cin >> n;
+        cin >> s;
+        cout << display(n,s) << "\n";
+    }
 }
