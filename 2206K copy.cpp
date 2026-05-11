@@ -91,8 +91,6 @@ bool check_unos(int x, string s){
     int n_1 = cant_1(s);
     int n_2_5 = cant_2_5(s);
     int n_6_9 = cant_6_9(s);
-    int d = 0;
-    int max = 0;
 
     bool p1 = false;
     bool p2 = false;
@@ -209,8 +207,9 @@ int display(int n, string s) {
     int n_1 = cant_1(s);
     int n_2_5 = cant_2_5(s);
     int n_6_9 = cant_6_9(s);
-    int d = 0;
-    int max = 0;
+    int d = 0; //cantidad de displays 0_:__
+    int t = 0; //cantidad de displays 1_:__
+    int max = 0; //cantidad maxima de displays
     
     while (x>=0){
         bool p1 = false;
@@ -324,19 +323,131 @@ int display(int n, string s) {
     while(d >= 0){
         int l = 0;
         int r = n/4;
-        if(check(r, s)) return r;
+        if(check(r, s)) {
+            t = r;
+        }
         else{
             while(l+1<r){
                 int mid = l + (r-1)/2;
                 if(check(mid,s)) l = mid;
                 else r = mid;
             }
-        return l;
+            t = r;
         }
-        d -= 1;
-    }
 
-    
+        if(d+t > max) max = d + t;
+
+        d -= 1;
+
+        //como mi d son las cantidades de displays con 0 que armo y en el paso anterior le reste uno, tengo que reconstruir rangos con numeros restantes
+        //hay cosas de mas que se pueden borrar pero creo que no afectan, copié y pegué
+        xt = d;
+        n_0 = cant_0(s);
+        n_1 = cant_1(s);
+        n_2_5 = cant_2_5(s);
+        n_6_9 = cant_6_9(s);
+        p1 = false;
+        p2 = false;
+        p3 = false;
+        p4 = false;
+        
+        //primera pos
+        if(xt >= 0 && n_0 - xt > 0 ) {
+            n_0 -= xt;
+            p1 = true;
+        }
+
+        //segunda pos
+        if(xt>0) {
+            if(xt > n_6_9){
+                xt -= n_6_9;
+                n_6_9 = 0;
+                if(xt > n_2_5){
+                    xt -= n_2_5;
+                    n_2_5 = 0;
+                    if(xt > n_0){
+                        xt -= n_0;
+                        n_0 = 0;
+                        if(xt > n_1){
+                            xt -= n_1;
+                            n_1 = 0;
+                        } else {
+                            n_1 -= xt;
+                            p2 = true;
+                        }
+                    } else {
+                        n_0 -= xt;
+                        p2 = true;
+                    }
+                } else {
+                    n_2_5 -= xt;
+                    p2 = true;
+                }
+            } else {
+                n_6_9 -= xt;
+                p2 = true;
+            }
+        }
+
+        //tercera pos
+        int xt = d;
+        if(xt>0) {
+            if(xt > n_2_5){
+                xt -= n_2_5;
+                n_2_5 = 0;
+                if(xt > n_0){
+                    xt -= n_0;
+                    n_0 = 0;
+                    if(xt > n_1){
+                        xt -= n_1;
+                        n_1 = 0;
+                    } else {
+                        n_1 -= xt;
+                        p2 = true;
+                    }
+                } else {
+                    n_0 -= xt;
+                    p2 = true;
+                }
+            } else {
+                n_2_5 -= xt;
+                p2 = true;
+            }
+        }
+
+        //cuarta pos
+        int xt = d;
+        if(xt>0) {
+            if(xt > n_6_9){
+                xt -= n_6_9;
+                n_6_9 = 0;
+                if(xt > n_2_5){
+                    xt -= n_2_5;
+                    n_2_5 = 0;
+                    if(xt > n_0){
+                        xt -= n_0;
+                        n_0 = 0;
+                        if(xt > n_1){
+                            xt -= n_1;
+                            n_1 = 0;
+                        } else {
+                            n_1 -= xt;
+                            p2 = true;
+                        }
+                    } else {
+                        n_0 -= xt;
+                        p2 = true;
+                    }
+                } else {
+                    n_2_5 -= xt;
+                    p2 = true;
+                }
+            } else {
+                n_6_9 -= xt;
+                p2 = true;
+            }
+        }
+    }  
 }
 
 int display_copy(int n, string s) {
@@ -385,14 +496,11 @@ int display_copy(int n, string s) {
 }
 
 int main() {
-    int t;
-    cin >> t;
+    int n;
+    string s;
 
-    while (t > 0){
-        int n;
-        string s;
-        cin >> n;
-        cin >> s;
-        t-=1;
-    }
+    cin >> t;
+    cin >> s;
+    
+    cout << display(n,s)
 }
