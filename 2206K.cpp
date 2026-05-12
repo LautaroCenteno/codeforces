@@ -26,7 +26,7 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-int cant_0(string s){
+int cant_0(std::string s){
     int res = 0;
     for (char x : s) {
         if (x == '0') {
@@ -40,16 +40,6 @@ int cant_1(string s){
     int res = 0;
     for (char x : s) {
         if (x == '1') {
-            res += 1;
-        }
-    }
-    return res;
-}
-
-int cant_0_1(string s){
-    int res = 0;
-    for (char x : s) {
-        if (x == '0' || x=='1') {
             res += 1;
         }
     }
@@ -70,15 +60,6 @@ int cant_6_9(string s){
     int res = 0;
     for (char x : s) {
         if (x=='6'|| x=='7' || x=='8' || x=='9') {
-            res += 1;
-        }
-    }
-    return res;
-}
-int cant_0_9(string s){
-    int res = 0;
-    for (char x : s) {
-        if (x == '0' || x=='1' || x == '2' || x=='3' || x=='4' || x=='5' || x=='6'|| x=='7' || x=='8' || x=='9') {
             res += 1;
         }
     }
