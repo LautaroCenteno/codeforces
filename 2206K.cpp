@@ -311,7 +311,7 @@ int display(int n, string s) {
         if((p1 && p2 && p3 && p4) || x == 0){
             d = x;
             int l = 0;
-            int r = n/4;
+            int r = n;
             if(check_unos(r, s, n_0, n_1, n_2_5, n_6_9)) {
                 t = r;
             }
@@ -464,12 +464,12 @@ int display(int n, string s) {
 
 int main() {
     int t;
+    int n;
+    string s;
     
     cin >> t;
     
     while(t--){
-        int n;
-        string s;
         cin >> n;
         cin >> s;
         cout << display(n,s) << "\n";
