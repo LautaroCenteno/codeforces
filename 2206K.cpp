@@ -26,7 +26,7 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-int cant_0(std::string s){
+int cant_0(string s){
     int res = 0;
     for (char x : s) {
         if (x == '0') {
@@ -292,7 +292,7 @@ int display(int n, string s) {
         if((p1 && p2 && p3 && p4) || x == 0){
             d = x;
             int l = 0;
-            int r = n;
+            int r = n/4;
             if(check_unos(r, s, n_0, n_1, n_2_5, n_6_9)) {
                 t = r;
             }
@@ -445,12 +445,12 @@ int display(int n, string s) {
 
 int main() {
     int t;
-    int n;
-    string s;
     
     cin >> t;
     
     while(t--){
+        int n;
+        string s;
         cin >> n;
         cin >> s;
         cout << display(n,s) << "\n";
