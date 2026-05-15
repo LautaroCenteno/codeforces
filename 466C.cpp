@@ -47,12 +47,14 @@ int main() {
     }
     buildPrefixSum(a, prefixSum, n);
     for(int i = 1; i < n - 1; i++) {
-        for(int j = i + 1; j <= n - 1; j++){
-            int sum1 = prefixSum[i-1];
-            int sum2 = prefixSum[j-1] - prefixSum[i-1];
-            int sum3 = prefixSum[n-1] - prefixSum[j-1];
-            if((sum1 == sum2) && (sum2 == sum3)) cant++;
-            else continue;
+        if(prefixSum[i-1] == prefixSum[n-1]/3){
+            for(int j = i + 1; j <= n - 1; j++){
+                int sum1 = prefixSum[i-1];
+                int sum2 = prefixSum[j-1] - prefixSum[i-1];
+                int sum3 = prefixSum[n-1] - prefixSum[j-1];
+                if((sum1 == sum2) && (sum2 == sum3)) cant++;
+                else continue;
+            }
         }
     }
     /*
