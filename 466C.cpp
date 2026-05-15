@@ -26,42 +26,61 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-void buildPrefixSum (const vi& a, vi& prefixSum, int n){
+void buildPrefixSum (const vll& a, vll& prefixSum, int n){
     prefixSum[0] = a[0];
     for(int i = 1; i < n; i++){
         prefixSum[i] = prefixSum[i - 1] + a[i];
     }
 }
 
+ll casoSum0(ll n){
+    ll res = 0;
+    for(int i = 1; i <= n-2; i++){
+        res += i;
+    }
+    return res;
+}
+
 int main() {
     int n;
-    vi a;
-    int cant = 0;
+    vll a;
+    ll cant = 0;
     cin >> n;
     int ntemp = n;
-    vi prefixSum(n);
+    vll prefixSum(n);
     while (ntemp--){
-        int x;
+        ll x;
         cin >> x;
         a.push_back(x);
     }
     buildPrefixSum(a, prefixSum, n);
-    for(int i = 1; i < n - 1; i++) {
-        if(prefixSum[i-1] == prefixSum[n-1]/3){
-            for(int j = i + 1; j <= n - 1; j++){
-                int sum1 = prefixSum[i-1];
-                int sum2 = prefixSum[j-1] - prefixSum[i-1];
-                int sum3 = prefixSum[n-1] - prefixSum[j-1];
-                if((sum1 == sum2) && (sum2 == sum3)) cant++;
-                else continue;
+    int s1 = 0;
+    if(prefixSum[n-1] == 0) {
+        for(int x:prefixSum) {
+            if(x == 0){
+                s1++;
             }
         }
+        cout << casoSum0((ll) s1);
+
     }
+    else if(prefixSum[n-1]%3 == 0){
+        for(int i = 1; i < n; i++) {
+            if(prefixSum[i-1] == prefixSum[n-1]/3){
+                s1++;
+            } else if(prefixSum[i-1] == (prefixSum[n-1]/3)*2){
+                cant += (ll) s1;
+            }
+        }
+        cout << cant;
+    } else {
+        cout << 0;
+    }
+    
     /*
     for (int x : prefixSum) {
         cout << x << " ";
     }
     */
-    cout << cant;
     return 0;
 }
