@@ -26,6 +26,7 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
+/*
 int main() {
     int n;
     cin >> n;
@@ -39,5 +40,50 @@ int main() {
             
         }
     }
+    return 0;
+}
+*/
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,pair<bool,bool>>> v;
+
+    while(n--){
+        int a;
+        cin >> a;
+        pair<int,pair<bool,bool>> p = {a,{false,false}}; // En .second: .first dice si ya está dentro de una caja, .second si contiene una caja.
+        v.pb(p);
+    }
+
+    sort(v.begin(), v.end());
+
+    /*
+    for(pair<int,pair<bool,bool>> p:v){
+        cout << p.first << "\n";
+    }
+    REVISÉ QUE EFECTIVAMENTE MI SORT ORDENE LOS PAIRS POR SU .FIRST, ES DECIR, EL TAMAÑO DE LA CAJA
+    */
+   
+    F0(i,n-1){
+        if(v[i].second.first == false){
+            for(int j = i + 1; j < n; j++){
+                if(v[j].first > v[i].first && v[j].second.second == false){
+                    v[i].second.first = true;
+                    v[j].second.second = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+
+    int res = 0;
+    for(pair<int,pair<bool,bool>> p:v){
+        if(p.second.first == false) res++;
+    }
+
+    cout << res;
+
     return 0;
 }
