@@ -42,6 +42,7 @@ int main() {
     }
     return 0;
 }
+Al principio encaré el ejercicio de esta forma, no es que lo haya pensado mucho, despues fui por otro camino
 */
 
 int main() {
@@ -49,7 +50,9 @@ int main() {
     cin >> n;
     vector<pair<int,pair<bool,bool>>> v;
 
-    while(n--){
+    int ntemp = n;
+
+    while(ntemp--){
         int a;
         cin >> a;
         pair<int,pair<bool,bool>> p = {a,{false,false}}; // En .second: .first dice si ya está dentro de una caja, .second si contiene una caja.
@@ -64,7 +67,8 @@ int main() {
     }
     REVISÉ QUE EFECTIVAMENTE MI SORT ORDENE LOS PAIRS POR SU .FIRST, ES DECIR, EL TAMAÑO DE LA CAJA
     */
-   
+
+    //for(int i = 0; i < n-1; i++)
     F0(i,n-1){
         if(v[i].second.first == false){
             for(int j = i + 1; j < n; j++){
@@ -76,14 +80,22 @@ int main() {
             }
         }
     }
-    
 
+    /*
+    for(pair<int,pair<bool,bool>> p:v){
+        cout << p.first << " " << p.second.first  << " " << p.second.second << "\n";
+    }
+    Reviso que se haya modificado los "pairs" correctamente
+    */
+
+    
     int res = 0;
     for(pair<int,pair<bool,bool>> p:v){
         if(p.second.first == false) res++;
     }
-
+    
     cout << res;
-
+    
+    
     return 0;
 }
