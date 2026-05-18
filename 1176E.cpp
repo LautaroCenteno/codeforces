@@ -29,13 +29,13 @@ typedef vector<bool> vbool;
 
 void dfs_paint(int s, vvi& g, vector<bool>& visited, vector<bool>& painted, bool c){
     if(visited[s]) return; // aca return false si estoy buscando ciclos
-    vistied[s] = true;
+    visited[s] = true;
     if(c){
         painted[s] = true;
     }
     c = !c;
     for(int i = 0; i < g[s].size(); i++){
-        dfs(g[s][i], g, visited, painted);
+        dfs_paint((g[s][i]-1), g, visited, painted, c);
     }
 }
 
@@ -89,12 +89,19 @@ int main() {
         */
 
         dfs_paint(0,g,visited1,painted1,true);
-        dfs_paint(0,g,visited1,painted1,false);
+        dfs_paint(0,g,visited2,painted2,false);
 
         if(cant_true(painted1) < cant_true(painted2)){
             cout << cant_true(painted1) << "\n";
-            for(i = 0; i < painted1.size(); i++){
+            for(int i = 0; i < painted1.size(); i++){
                 if(painted1[i]){
+                    cout << (i+1) << " ";
+                } 
+            }
+        } else{
+            cout << cant_true(painted2) << "\n";
+            for(int i = 0; i < painted2.size(); i++){
+                if(painted2[i]){
                     cout << (i+1) << " ";
                 } 
             }
