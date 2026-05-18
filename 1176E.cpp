@@ -26,16 +26,28 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-/*
-void dfs(int s, vvi& g, vector<int>& visited, int componenteConexa){
+
+void dfs_paint(int s, vvi& g, vector<bool>& visited, vector<bool>& painted, bool c){
     if(visited[s]) return; // aca return false si estoy buscando ciclos
-    vistied[s] = componenteConexa;
+    vistied[s] = true;
+    if(c){
+        painted[s] = true;
+    }
+    c = !c;
     for(int i = 0; i < g[s].size(); i++){
-        dfs(g[s][i], g, visited);
+        dfs(g[s][i], g, visited, painted);
     }
 }
-*/
 
+int cant_true(vbool v){
+    int res = 0;
+    for(bool b:v){
+        if(b){
+            res++;
+        }
+    }
+    return res;
+}
 
 int main() {
     int t;
@@ -47,27 +59,46 @@ int main() {
         int mtemp = m;
         vvi g(n);
         //vpi rank(n);
-        vbool visited(n);
+        vbool visited1(n);
+        vbool painted1(n);
+        vbool visited2(n);
+        vbool painted2(n);
+        /*
         F0(i,n){
             rank[i] = {0,i+1};
         }
+        */
         while(mtemp--){
             int x, y;
             cin >> x >> y;
             g[x-1].pb(y);
             g[y-1].pb(x);
-            rank[x-1].first++;
-            rank[y-1].first++;
+            //rank[x-1].first++;
+            //rank[y-1].first++;
         }
 
+        /*
         sort(rank.begin(),rank.end());
         reverse(rank.begin(),rank.end());
+        */
 
         /*
         F0(i,n){
             cout << rank[i].first << " " << rank[i].second << "\n";
         }
         */
+
+        dfs_paint(0,g,visited1,painted1,true);
+        dfs_paint(0,g,visited1,painted1,false);
+
+        if(cant_true(painted1) < cant_true(painted2)){
+            cout << cant_true(painted1) << "\n";
+            for(i = 0; i < painted1.size(); i++){
+                if(painted1[i]){
+                    cout << (i+1) << " ";
+                } 
+            }
+        }
         
     }
     return 0;
