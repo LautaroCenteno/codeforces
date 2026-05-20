@@ -27,17 +27,32 @@ typedef vector<bool> vbool;
 #define S second
 
 
-void dfs(int i, int j, vector<string>& g, vector<vbool>& visited, vector<pi>& camino){
-    if(visited[s]) return; // aca return false si estoy buscando ciclos
-    vistied[s] = true;
-    if(c){
-        painted[s] = true;
+void caminos(int i, int j, vector<string>& g, vector<vbool>& visited, vector<pi> camino, vector<vector<pi>>& caminos){
+    if(visited[i][j]) return; // aca return false si estoy buscando ciclos
+    if(g[i][j] == 'E'){
+        caminos.pb(camino);
+        return;
     }
-    c = !c;
+    camino.pb({i,j});
+    vistied[i][j] = true;
     for(int i = 0; i < g[s].size(); i++){
-        dfs(g[s][i], g, visited, painted);
+        if((i+1) < g.size() ) dfs((i+1), (j), g, visited, camino, caminos);
+        if((i-1) < g.size()) dfs((i-1), (j), g, visited, camino, caminos);
+        if((j+1) < g.size()) dfs((i), (j+1), g, visited, camino, caminos);
+        if((j-1) < g.size()) dfs((i), (j-1), g, visited, camino, caminos);
     }
 }
+
+pi pos_s(vector<string> g){
+    pi res;
+    F0(i,g.size()){
+        F0(j,g[i].size()){
+            if(g[i][j] == 'S') res = {i,j};
+        }
+    }
+}
+
+bool llega_en_n_pasos(int i, int j, vector<string>& g, vector<vbool>& visited)
 
 int main() {
     int r;
@@ -50,7 +65,22 @@ int main() {
         cin >> s;
         g[i] = s;
     }
-    //caminos(...)
+    int res;
+    pi pos_s = pos_s(g);
+    vector<vbool> visited(r, vbool(c));
+    vector<pi> camino;
+    vector<vector<pi>> caminos;
+    vector<pi> pos_breeders;
+    F0(i,r){
+        F0(j,c){
+            if( g[i][j] == '1', g[i][j] == '2', g[i][j] == '3', g[i][j] == '4', g[i][j] == '5', g[i][j] == '6', g[i][j] == '7', g[i][j] == '8', g[i][j] == '9') pos_breeders.pb({i,j});
+        }
+    }
+
+    caminos(pos_s.first,pos_s.second,g,visited,camino,caminos)
+    res = combates_min(...)
+
+    cout >> res;
     
     return 0;
 }
