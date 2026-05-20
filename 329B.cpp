@@ -42,7 +42,7 @@ void dfs_caminos(int i, int j, vector<string>& g, vector<vbool>& visited, vector
     if((j-1) >= 0 && g[i][j-1] != 'T') dfs_caminos((i), (j-1), g, visited, camino, caminos);
 }
 
-pi pos_start(vector<string> g){
+pi pos_start(vector<string>& g){
     pi res;
     F0(i,g.size()){
         F0(j,g[i].size()){
@@ -58,14 +58,14 @@ bool llega_en_n_pasos(int i, int j, int n, pi meta, vector<string>& g, vector<vb
     bool res = false;
     n--;
     visited[i][j] = true;
-    if((i+1) < g.size() && g[i+1][j] != 'T') res = res && llega_en_n_pasos((i+1), (j), n, meta, g, visited);
-    if((i-1) >= 0 && g[i-1][j] != 'T') res = res && llega_en_n_pasos((i-1), (j), n, meta, g, visited);
-    if((j+1) < g[i].size() && g[i][j+1] != 'T') res = res && llega_en_n_pasos((i), (j+1), n, meta, g, visited);
-    if((j-1) >= 0 && g[i][j-1] != 'T') res = res && llega_en_n_pasos((i), (j-1), n, meta, g, visited);
+    if((i+1) < g.size() && g[i+1][j] != 'T') res = res || llega_en_n_pasos((i+1), (j), n, meta, g, visited);
+    if((i-1) >= 0 && g[i-1][j] != 'T') res = res || llega_en_n_pasos((i-1), (j), n, meta, g, visited);
+    if((j+1) < g[i].size() && g[i][j+1] != 'T') res = res || llega_en_n_pasos((i), (j+1), n, meta, g, visited);
+    if((j-1) >= 0 && g[i][j-1] != 'T') res = res || llega_en_n_pasos((i), (j-1), n, meta, g, visited);
     return res;
 }
 
-int min_peleas(vi v){
+int min_peleas(vi& v){
     int res = v[0];
     for(int i = 1; i < v.size(); i++){
         if(v[i] < res) res = v[i];
@@ -101,12 +101,24 @@ int main() {
         }
     }
 
-    vector<vbool> visited2(r, vbool(c));
+    
 
     F0(i,caminos.size()){
         F0(k,breeders.size()){
             F0(j,caminos[i].size()){
-                if(llega_en_n_pasos(breeders[k].first, breeders[k].second, j, caminos[i][j], g, visited2)) peleas_por_camino[i] += g[breeders[k].first][breeders[k].second] - '0';
+                vector<vbool> visited2(r, vbool(c));
+                if(llega_en_n_pasos(breeders[k].first, breeders[k].second, j, caminos[i][j], g, visited2)){
+                    /*FUNCIONA
+                    F0(i, visited2.size()){
+                        F0(j, visited2[i].size()){
+                            cout << visited2[i][j] << " ";
+                        }
+                        cout << "\n";
+                    }
+                    */
+                    peleas_por_camino[i] += g[breeders[k].first][breeders[k].second] - '0';
+                    break;
+                } 
             }
         }
     }
@@ -127,25 +139,36 @@ int main() {
     */
 
     /*FUNCIONA
+    F0(i, visited2.size()){
+        F0(j, visited2[i].size()){
+            cout << visited2[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    */
+    
+    /*FUNCIONA
     F0(i, caminos.size()){
         F0(j, caminos[i].size()){
             cout << caminos[i][j].first << " " << caminos[i][j].second << ", ";
         }
         cout << "\n";
     }
-    */
+    
 
     /*FUNCIONA
     F0(i, breeders.size()){
         cout << breeders[i].first << " " << breeders[i].second << ", ";
     }
-    */
+
+    cout << "\n";
 
     F0(i,peleas_por_camino.size()){
         cout << peleas_por_camino[i] << ", ";
     }
+    */
 
-    //cout << res;
+    cout << res;
     
     return 0;
 }
