@@ -26,20 +26,52 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
+void bfs_dist(pi s, vector<string>& g, vvi& g_dist, vector<vbool>& visited){
+    queue<pi> q;
+    int pasos = 0;
+    visited[s.first][s.second] = true;
+    g_dist[s.first][s.second] = pasos;
+    q.push(s);
+    while(!q.empty()){
+        pasos++;
+        vpi vecinos;
+        if((q.front().first + 1) < g.size() && g[q.front().first + 1][q.front().second] != 'T') vecinos.pb({q.front().first + 1,q.front().second});
+        if((q.front().first - 1) >= 0 && g[q.front().first - 1][q.front().second] != 'T') vecinos.pb({q.front().first - 1,q.front().second});
+        if((q.front().second + 1) < g[q.front().first].size() && g[q.front().first][q.front().second + 1] != 'T') vecinos.pb({q.front().first,q.front().second + q.front().second});
+        if((q.front().second - 1) >= 0 && g[q.front().first][q.front().second - 1] != 'T') vecinos.pb({q.front().first,q.front().second - 1});
+        q.pop();
+        for(int i = 0; i < vecinos.size(); i++){
+            if(visited[vecinos[i].first][vecinos[i].second]) continue;
+            g_dist[vecinos[i].first][vecinos[i].second] = pasos;
+            visited[vecinos[i].first][vecinos[i].second] = true;
+            q.push(vecinos[i]);
+        }
+    }
+}
 
-void dfs_caminos(int i, int j, vector<string>& g, vector<vbool>& visited, vector<pi> camino, vector<vector<pi>>& caminos){
+void dfs_dist(int i, int j, int pasos, vector<string>& g, vvi& g_dist, vector<vbool>& visited){
+    if(visited[i][j]) return; // aca return false si estoy buscando ciclos
+    if(g[i][j] != 'T') g_dist[i][j] = pasos;
+    visited[i][j] = true;
+    pasos++;
+    if((i+1) < g.size() && g[i+1][j] != 'T') dfs_dist((i+1), (j), pasos, g, g_dist, visited);
+    if((i-1) >= 0 && g[i-1][j] != 'T') dfs_dist((i-1), (j), pasos, g, g_dist, visited);
+    if((j+1) < g[i].size() && g[i][j+1] != 'T') dfs_dist((i), (j+1), pasos, g, g_dist, visited);
+    if((j-1) >= 0 && g[i][j-1] != 'T') dfs_dist((i), (j-1), pasos, g, g_dist, visited);
+}
+
+void dfs_caminos(int i, int j, int pasos, int& menor_pasos, vector<string>& g, vector<vbool>& visited){
     if(visited[i][j]) return; // aca return false si estoy buscando ciclos
     if(g[i][j] == 'E'){
-        camino.pb({i,j});
-        caminos.pb(camino);
+        if(pasos < menor_pasos) menor_pasos = pasos;
         return;
     }
-    camino.pb({i,j});
+    pasos++;
     visited[i][j] = true;
-    if((i+1) < g.size() && g[i+1][j] != 'T') dfs_caminos((i+1), (j), g, visited, camino, caminos);
-    if((i-1) >= 0 && g[i-1][j] != 'T') dfs_caminos((i-1), (j), g, visited, camino, caminos);
-    if((j+1) < g[i].size() && g[i][j+1] != 'T') dfs_caminos((i), (j+1), g, visited, camino, caminos);
-    if((j-1) >= 0 && g[i][j-1] != 'T') dfs_caminos((i), (j-1), g, visited, camino, caminos);
+    if((i+1) < g.size() && g[i+1][j] != 'T') dfs_caminos((i+1), (j), pasos, menor_pasos, g, visited);
+    if((i-1) >= 0 && g[i-1][j] != 'T') dfs_caminos((i-1), (j), pasos, menor_pasos, g, visited);
+    if((j+1) < g[i].size() && g[i][j+1] != 'T') dfs_caminos((i), (j+1), pasos, menor_pasos, g, visited);
+    if((j-1) >= 0 && g[i][j-1] != 'T') dfs_caminos((i), (j-1), pasos, menor_pasos, g, visited);
 }
 
 pi pos_start(vector<string>& g){
@@ -47,6 +79,16 @@ pi pos_start(vector<string>& g){
     F0(i,g.size()){
         F0(j,g[i].size()){
             if(g[i][j] == 'S') res = {i,j};
+        }
+    }
+    return res;
+}
+
+pi pos_end(vector<string>& g){
+    pi res;
+    F0(i,g.size()){
+        F0(j,g[i].size()){
+            if(g[i][j] == 'E') res = {i,j};
         }
     }
     return res;
@@ -86,14 +128,13 @@ int main() {
     }
     int res;
     pi pos_s = pos_start(g);
+    pi pos_e = pos_end(g);
     vector<vbool> visited(r, vbool(c));
     vector<pi> camino;
-    vector<vector<pi>> caminos;
     vector<pi> breeders;
-
-    dfs_caminos(pos_s.first,pos_s.second,g,visited,camino,caminos);
-
-    vi peleas_por_camino(caminos.size());
+    int menor_peleas = 0;
+    int menor_pasos = r*c + 1;
+    vvi g_dist(r, vi(c));
 
     F0(i,g.size()){
         F0(j,g[i].size()){
@@ -101,29 +142,30 @@ int main() {
         }
     }
 
-    
+    dfs_caminos(pos_s.first,pos_s.second,0,menor_pasos,g,visited);
 
-    F0(i,caminos.size()){
-        F0(k,breeders.size()){
-            F0(j,caminos[i].size()){
-                vector<vbool> visited2(r, vbool(c));
-                if(llega_en_n_pasos(breeders[k].first, breeders[k].second, j, caminos[i][j], g, visited2)){
-                    /*FUNCIONA
-                    F0(i, visited2.size()){
-                        F0(j, visited2[i].size()){
-                            cout << visited2[i][j] << " ";
-                        }
-                        cout << "\n";
-                    }
-                    */
-                    peleas_por_camino[i] += g[breeders[k].first][breeders[k].second] - '0';
-                    break;
-                } 
+    vector<vbool> visited2(r, vbool(c));
+    bfs_dist(pos_e,g,g_dist,visited2);
+
+    
+    F0(i,g.size()){
+        F0(j,g[i].size()){
+            if(g[i][j] != 'T' && g[i][j] != 'S' && g[i][j] != 'E' && g[i][j] != '0' && g_dist[i][j] <= menor_pasos){
+                menor_peleas += g[i][j] - '0';
             }
         }
     }
+    
 
-    res = min_peleas(peleas_por_camino);
+    /* SE VA DE COMPLEJIDAD (CREO)
+    F0(k,breeders.size()){
+        vector<vbool> visited2(r, vbool(c));
+        if(llega_en_n_pasos(breeders[k].first, breeders[k].second, menor_pasos, pos_e, g, visited2)){
+            menor_peleas += g[breeders[k].first][breeders[k].second] - '0';
+        } 
+    }
+    */
+    
 
     /* FUNCIONA
     cout << pos_s.first << " " << pos_s.second << "\n";
@@ -168,7 +210,14 @@ int main() {
     }
     */
 
-    cout << res;
+    F0(i,g_dist.size()){
+        F0(j,g_dist[i].size()){
+            cout << g_dist[i][j] << " ";
+        }
+        cout << "\n";
+    }
+
+    //cout << menor_peleas;
     
     return 0;
 }
