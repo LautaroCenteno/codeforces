@@ -71,11 +71,15 @@ int main() {
     vector<pi> camino;
     vector<vector<pi>> caminos;
     vector<pi> pos_breeders;
-    F0(i,r){
-        F0(j,c){
-            if( g[i][j] == '1', g[i][j] == '2', g[i][j] == '3', g[i][j] == '4', g[i][j] == '5', g[i][j] == '6', g[i][j] == '7', g[i][j] == '8', g[i][j] == '9') pos_breeders.pb({i,j});
+    F0(i,caminos.size()){
+        F0(i,r){
+            F0(j,c){
+                if( g[i][j] == '1', g[i][j] == '2', g[i][j] == '3', g[i][j] == '4', g[i][j] == '5', g[i][j] == '6', g[i][j] == '7', g[i][j] == '8', g[i][j] == '9'){
+                }
+            }
         }
     }
+    
 
     caminos(pos_s.first,pos_s.second,g,visited,camino,caminos)
     res = combates_min(...)
