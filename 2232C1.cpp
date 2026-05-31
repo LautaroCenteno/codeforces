@@ -30,15 +30,13 @@ int main() {
     int t;
     cin >> t;
     F0(i,t){
-        int n;
-        vi v;
-        int res;
-        cin >> n;
-        F0(i,n){
-            int a;
-            cin >> a;
-            v.pb(a);
+        int n,x,s;
+        cin >> n,x,s;
+        vi v(x);
+        string s;
+        cin >> s;
+        F0(j,n){
+            
         }
-        cout << res << "\n";
     }
 }

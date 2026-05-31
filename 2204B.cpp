@@ -31,14 +31,42 @@ int main() {
     cin >> t;
     F0(i,t){
         int n;
-        vi v;
-        int res;
         cin >> n;
-        F0(i,n){
+        vi v;
+        F0(j,n){
             int a;
             cin >> a;
             v.pb(a);
         }
+        int res = 1;
+        int max = v[0];
+        for(int j = 1; j < v.size(); j++){
+            if(v[j] >= v[j-1] && v[j] >= max){
+                res+=1;
+                max = v[j];
+            }
+        }
+        /*
+        while(v.size() > 0){
+            int maxI = 0;
+            for(int j = 1; j < v.size(); j++){
+                if(v[j] >= v[maxI]) maxI = j;
+            }
+            vi v2;
+            for(int j = 0; j < maxI; j++){
+                v2.pb(v[j]);
+            }
+            v = v2;
+            res += 1;
+        }
+        */
+        /*
+        cout << maxI << "\n";
+        for(int l : v){
+            cout << l << " ";
+        }
+        cout << "\n";
+        */
         cout << res << "\n";
     }
 }

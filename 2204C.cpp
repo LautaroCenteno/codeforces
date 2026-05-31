@@ -30,15 +30,18 @@ int main() {
     int t;
     cin >> t;
     F0(i,t){
-        int n;
-        vi v;
-        int res;
-        cin >> n;
-        F0(i,n){
-            int a;
-            cin >> a;
-            v.pb(a);
-        }
-        cout << res << "\n";
+        ll a,b,c,m;
+        cin >> a >> b >> c >> m;
+        ll a_b_c = m/a/b/c;
+        ll a_b = m/a/b - a_b_c;
+        ll a_c = m/a/c - a_b_c;
+        ll b_c = m/b/c - a_b_c;
+        ll n_a = m/a - m/a/b - (m/a/c - m/a/b/c);
+        ll n_b = m/b - m/a/b - (m/b/c - m/a/b/c);
+        ll n_c = m/c - m/a/c - (m/b/c - m/a/b/c);
+        ll res_a = a_b_c*2 + a_b*3 + a_c*3 + n_a*6;
+        ll res_b = a_b_c*2 + a_b*3 + b_c*3 + n_b*6;
+        ll res_c = a_b_c*2 + a_c*3 + b_c*3 + n_c*6;
+        cout << res_a << " " << res_b << " " << res_c << "\n";
     }
 }

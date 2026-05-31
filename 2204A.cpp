@@ -31,13 +31,16 @@ int main() {
     cin >> t;
     F0(i,t){
         int n;
-        vi v;
-        int res;
         cin >> n;
-        F0(i,n){
-            int a;
-            cin >> a;
-            v.pb(a);
+        string s;
+        cin >> s;
+        int res = 0;
+        F0(j,n){
+            if(s[j] == 'R') res += 1;
+            else{
+                res += 1;
+                break;
+            }
         }
         cout << res << "\n";
     }
