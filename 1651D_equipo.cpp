@@ -27,7 +27,7 @@ typedef vector<bool> vbool;
 #define S second
 
 unordered_set<long long> myArray;
-unordered_map<long long, long long> RES;
+unordered_map<long long, long long> BORDES;
 unordered_map<long long, long long> RESPUESTAS;
 vector<long long> sinRespuestas;
 int maxI = 200005;
@@ -44,7 +44,7 @@ bool valExists(int x, int y) {  //O(1)
 void bfs(long long hash){
     int dist = 300000;
     long long resp;
-    for (const auto& pair : RES) {
+    for (const auto& pair : BORDES) {
         int y1 = hash % maxI;
         int x1 = hash / maxI;
         int y = pair.first % maxI;
@@ -56,43 +56,46 @@ void bfs(long long hash){
     RESPUESTAS[hash] = resp;
 }
 
-void bfs_V2(long long hash){
+void bfs_V2(){
     queue<pi> q;
     unordered_set<long long> visited;
     long long resp;
-    bool encontrado = false;
-    int x = hash / maxI;
-    int y = hash % maxI;
-    pi p_inicial = {x,y};
-    visited.insert(hash);
-    q.push(p_inicial);
+    for (const auto& [k,v] : BORDES) {
+        visited.insert(k);
+        int x = k / maxI;
+        int y = k % maxI;
+        pi p = {x,y};
+        q.push(p);
+    }
+    
     while(!q.empty()){
         //VERIFICO PRIMERO SI ALGUNO ES RESPUESTA
-        if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1 && RES.count(1LL * (q.front().first + 1) * maxI + q.front().second) == 1) {
-            encontrado = true;
-            resp = 1LL * (q.front().first + 1) * maxI + q.front().second;
-            RESPUESTAS[hash] = resp;
-            return;
+        if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1 && sinRespuestas.count(1LL * (q.front().first + 1) * maxI + q.front().second) == 1) {
+            resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
+            RESPUESTAS[1LL * (q.front().first + 1) * maxI + q.front().second] = resp;
+            visited.insert(1LL * (q.front().first + 1) * maxI + q.front().second);
+            q.push({q.front().first + 1, q.front().second});
         }
-        if((q.front().first - 1) >= 1 && visited.count(1LL * (q.front().first - 1) * maxI + q.front().second) != 1 && RES.count(1LL * (q.front().first - 1) * maxI + q.front().second) == 1){
-            encontrado = true;
-            resp = 1LL * (q.front().first - 1) * maxI + q.front().second;
-            RESPUESTAS[hash] = resp;
-            return;
+        if((q.front().first - 1) >= 1 && visited.count(1LL * (q.front().first - 1) * maxI + q.front().second) != 1 && sinRespuestas.count(1LL * (q.front().first - 1) * maxI + q.front().second) == 1){
+            resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
+            RESPUESTAS[1LL * (q.front().first - 1) * maxI + q.front().second] = resp;
+            visited.insert(1LL * (q.front().first - 1) * maxI + q.front().second);
+            q.push({q.front().first - 1, q.front().second});
         } 
-        if((q.front().second + 1) <= 200000 && visited.count(1LL * q.front().first * maxI + (q.front().second + 1)) != 1 && RES.count(1LL * q.front().first * maxI + (q.front().second + 1)) == 1){
-            encontrado = true;
-            resp = 1LL * q.front().first * maxI + (q.front().second + 1);
-            RESPUESTAS[hash] = resp;
-            return;
+        if((q.front().second + 1) <= 200000 && visited.count(1LL * q.front().first * maxI + (q.front().second + 1)) != 1 && sinRespuestas.count(1LL * q.front().first * maxI + (q.front().second + 1)) == 1){
+            resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
+            RESPUESTAS[1LL * q.front().first * maxI + (q.front().second + 1)] = resp;
+            visited.insert(1LL * q.front().first * maxI + (q.front().second + 1));
+            q.push({q.front().first, q.front().second + 1});
         } 
-        if((q.front().second - 1) >= 1 && visited.count(1LL * q.front().first * maxI + (q.front().second - 1)) != 1 && RES.count(1LL * q.front().first * maxI + (q.front().second - 1)) == 1){
-            encontrado = true;
-            resp = 1LL * q.front().first * maxI + (q.front().second - 1);
-            RESPUESTAS[hash] = resp;
-            return;
+        if((q.front().second - 1) >= 1 && visited.count(1LL * q.front().first * maxI + (q.front().second - 1)) != 1 && sinRespuestas.count(1LL * q.front().first * maxI + (q.front().second - 1)) == 1){   
+            resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
+            RESPUESTAS[1LL * q.front().first * maxI + (q.front().second - 1)] = resp;
+            visited.insert(1LL * q.front().first * maxI + (q.front().second - 1));
+            q.push({q.front().first, q.front().second - 1});
         }
         //COMO NO HUBO RESPUESTA, AÑADO A LA COLA LOS ADYACENTES
+        /*
         if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1) {
             visited.insert(1LL * (q.front().first + 1) * maxI + q.front().second);
             q.push({q.front().first + 1, q.front().second});
@@ -109,6 +112,7 @@ void bfs_V2(long long hash){
             visited.insert(1LL * q.front().first * maxI + (q.front().second - 1));
             q.push({q.front().first, q.front().second - 1});
         }
+        */
 
         q.pop();
     }
@@ -116,7 +120,7 @@ void bfs_V2(long long hash){
 
 void encontrar_respuesta(long long hash){
     long long resp;
-    for (const auto& [k,v] : RES) {
+    for (const auto& [k,v] : BORDES) {
         int x = hash / maxI;
         int y = hash % maxI;
         int x1 = k / maxI;
@@ -140,9 +144,7 @@ void find_nearest_V2(int x, int y) {    //O(1)
             if (deltaX ==1 && deltaY == 1){
                 continue;
             }
-            if (!valExists(x - deltaX, y - deltaY))
-            {
- 
+            if (!valExists(x - deltaX, y - deltaY)) {
                 reshash = 1LL * (x - deltaX) * maxI + (y - deltaY);
                 count += 1;
             }
@@ -161,7 +163,7 @@ void find_nearest_V2(int x, int y) {    //O(1)
         }
     }
     if(count > 0 && count < 4){
-        RES[reshash] = 1LL * x * maxI + y;
+        BORDES[1LL * x * maxI + y] = reshash;
     }
     if(count > 0){
         RESPUESTAS[1LL * x * maxI + y] = reshash;
@@ -212,17 +214,15 @@ int main() {
         data.push_back(make_pair(x, y));
         myArray.insert(1LL * x * maxI + y);
     }
-    /*
     for (pair<int, int> p: data) {  //O(2.10^5)
         find_nearest_V2(p.first, p.second);
     }
+    /*
     for (long long i: sinRespuestas){
         encontrar_respuesta(i);
     }
     */
-    for (pair<int, int> p: data) {  //O(2.10^5)
-        bfs_V2(1LL * p.first * maxI + p.second);
-    }
+    bfs_V2(1LL * p.first * maxI + p.second);
  
     for (pair<int, int> p: data) {
         long long reshash = RESPUESTAS[1LL * p.first * maxI + p.second];
