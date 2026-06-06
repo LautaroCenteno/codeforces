@@ -70,25 +70,25 @@ void bfs_V2(){
     
     while(!q.empty()){
         //VERIFICO PRIMERO SI ALGUNO ES RESPUESTA
-        if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1 && sinRespuestas.count(1LL * (q.front().first + 1) * maxI + q.front().second) == 1) {
+        if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1 && valExists(q.front().first + 1, q.front().second)) {
             resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
             RESPUESTAS[1LL * (q.front().first + 1) * maxI + q.front().second] = resp;
             visited.insert(1LL * (q.front().first + 1) * maxI + q.front().second);
             q.push({q.front().first + 1, q.front().second});
         }
-        if((q.front().first - 1) >= 1 && visited.count(1LL * (q.front().first - 1) * maxI + q.front().second) != 1 && sinRespuestas.count(1LL * (q.front().first - 1) * maxI + q.front().second) == 1){
+        if((q.front().first - 1) >= 1 && visited.count(1LL * (q.front().first - 1) * maxI + q.front().second) != 1 && valExists(q.front().first - 1, q.front().second)){
             resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
             RESPUESTAS[1LL * (q.front().first - 1) * maxI + q.front().second] = resp;
             visited.insert(1LL * (q.front().first - 1) * maxI + q.front().second);
             q.push({q.front().first - 1, q.front().second});
         } 
-        if((q.front().second + 1) <= 200000 && visited.count(1LL * q.front().first * maxI + (q.front().second + 1)) != 1 && sinRespuestas.count(1LL * q.front().first * maxI + (q.front().second + 1)) == 1){
+        if((q.front().second + 1) <= 200000 && visited.count(1LL * q.front().first * maxI + (q.front().second + 1)) != 1 && valExists(q.front().first, q.front().second + 1)){
             resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
             RESPUESTAS[1LL * q.front().first * maxI + (q.front().second + 1)] = resp;
             visited.insert(1LL * q.front().first * maxI + (q.front().second + 1));
             q.push({q.front().first, q.front().second + 1});
         } 
-        if((q.front().second - 1) >= 1 && visited.count(1LL * q.front().first * maxI + (q.front().second - 1)) != 1 && sinRespuestas.count(1LL * q.front().first * maxI + (q.front().second - 1)) == 1){   
+        if((q.front().second - 1) >= 1 && visited.count(1LL * q.front().first * maxI + (q.front().second - 1)) != 1 && valExists(q.front().first, q.front().second - 1)){   
             resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
             RESPUESTAS[1LL * q.front().first * maxI + (q.front().second - 1)] = resp;
             visited.insert(1LL * q.front().first * maxI + (q.front().second - 1));
@@ -222,7 +222,7 @@ int main() {
         encontrar_respuesta(i);
     }
     */
-    bfs_V2(1LL * p.first * maxI + p.second);
+    bfs_V2();
  
     for (pair<int, int> p: data) {
         long long reshash = RESPUESTAS[1LL * p.first * maxI + p.second];
