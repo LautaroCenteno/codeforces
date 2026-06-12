@@ -30,18 +30,8 @@ int main() {
     int t;
     cin >> t;
     F0(i,t){
-        int n;
-        cin >> n;
         string s;
         cin >> s;
-        int res = 0;
-        F0(j,n){
-            if(s[j] == 'R') res += 1;
-            else{
-                res += 1;
-                break;
-            }
-        }
-        cout << res << "\n";
+        
     }
 }
