@@ -28,11 +28,25 @@ typedef vector<bool> vbool;
 
 vvi estados;
 
-int bfs(int n, vvi& g, vbool& visited1, vbool& visited2){
-    queue<int> q;
-    visited1[0] = true;
-    visited2[n-1] = true;
-
+int bfs(int n, vvi& g, unordered_set& visited){
+    int pasos = 0;
+    queue<vvi> q1;
+    vvi estado = {{0,n-1,0},{1},{n}}; //{{posB,posA,paso},{caminoB},{caminoA}}
+    visited.insert(estado);
+    q.push(estado);
+    while(!q.empty){
+        vvi actual = q.front();
+        q.pop();
+        if
+        /*
+        for(int i = 0; i < g[vecino].size(); i++){
+            if(visited[g[vecino][i]]) continue;
+            distancia[g[vecino][i]] = distance[vecino] + 1;
+            visited[g[vecino][i]] = true;
+            q.push(g[vecino][i]);
+        }
+        */
+    }
 }
 
 int main() {
@@ -54,7 +68,7 @@ int main() {
 
     cout << k << "\n";
     for(int i = 0; i < estados.size(); i += 2){
-        cout << estados 
+        cout << estados;
     }
     for(int i = 0; i < estados.size(); i += 2){
         
