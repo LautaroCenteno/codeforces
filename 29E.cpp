@@ -37,15 +37,16 @@ int bfs(int n, vvi& g, unordered_set& visited){
     while(!q.empty){
         vvi actual = q.front();
         q.pop();
-        if
-        /*
-        for(int i = 0; i < g[vecino].size(); i++){
-            if(visited[g[vecino][i]]) continue;
-            distancia[g[vecino][i]] = distance[vecino] + 1;
-            visited[g[vecino][i]] = true;
-            q.push(g[vecino][i]);
+        if(actual[0][2] == 0){
+            for(int i = 0; i < g[actual[0][0]].size; i++){
+                
+            }
         }
-        */
+        else{
+            for(int i = 0; i < g[actual[0][1]].size; i++){
+                
+            }
+        }
     }
 }
 
