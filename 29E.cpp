@@ -28,52 +28,78 @@ typedef vector<bool> vbool;
 
 vvi estados;
 
-int bfs(int n, vvi& g, unordered_set& visited){
+void bfs(int n, vvi& g, set<pi>& visited){
     int pasos = 0;
-    queue<vvi> q1;
-    vvi estado = {{0,n-1,0},{1},{n}}; //{{posB,posA,paso},{caminoB},{caminoA}}
-    visited.insert(estado);
+    queue<vvi> q;
+    vvi estado = {{0,n-1,0},{0},{n-1}};
+    visited.insert({estado[0][0],estado[0][1]});
     q.push(estado);
-    while(!q.empty){
+    while(!q.empty()){
         vvi actual = q.front();
+        int b = actual[0][0];
+        int a = actual[0][1];
+        int t = actual[0][2];
+        vi cb = actual[1];
+        vi ca = actual[2];
+        if(b == n-1 && a == 0 && t == 0){
+            cout << actual[1].size()-1 << "\n";
+            F0(i,actual[1].size()){
+                cout << actual[1][i] + 1 << " ";
+            }
+            cout << "\n";
+            F0(i,actual[2].size()){
+                cout << actual[2][i] + 1 << " ";
+            }
+            cout << "\n";
+            return;
+        }
         q.pop();
-        if(actual[0][2] == 0){
-            for(int i = 0; i < g[actual[0][0]].size; i++){
-                
+        if(t == 0){
+            for(int i = 0; i < g[b].size(); i++){
+                if(visited.count({g[b][i],a}) == 1) continue;
+                visited.insert({g[b][i],a});
+                cb.pb(g[b][i]);
+                q.push({{g[b][i],a,1},cb,ca});
             }
         }
-        else{
-            for(int i = 0; i < g[actual[0][1]].size; i++){
-                
+        else if(t == 1){
+            for(int i = 0; i < g[a].size(); i++){
+                if(visited.count({b,g[a][i]}) == 1 || g[a][i] == b) continue;
+                visited.insert({b,g[a][i]});
+                ca.pb(g[a][i]);
+                q.push({{b,g[a][i],0},cb,ca});
             }
         }
     }
+    cout << -1 << "\n";
 }
 
 int main() {
     int n, m;
     cin >> n >> m;
-    vvi g(n);
-    int mtemp = m;
-    F0(i,m)
+    vvi g;
+    F0(i,n){
+        g.pb({});
+    }
+    F0(i,m){
         int a1, a2;
         cin >> a1 >> a2;
-        g[a1].pb(a2);
-        g[a2].pb(a1);
+        g[a1-1].pb(a2-1);
+        g[a2-1].pb(a1-1);
     }
 
-    vbool visited1(n);
-    vbool visited2(n);
+    set<pi> visited;
 
-    int k = bfs(n, g, visited1, visited2);
+    bfs(n, g, visited);
 
-    cout << k << "\n";
-    for(int i = 0; i < estados.size(); i += 2){
-        cout << estados;
+    /* 
+    F0(i,g.size()){
+        F0(j, g[i].size()){
+            cout << g[i][j] << " ";
+        }
+        cout << "\n";
     }
-    for(int i = 0; i < estados.size(); i += 2){
-        
-    }
-
+    */
+    
     return 0;
 }
