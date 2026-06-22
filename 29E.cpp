@@ -34,14 +34,23 @@ void bfs(int n, vvi& g, set<pi>& visited){
     vvi estado = {{0,n-1,0},{0},{n-1}};
     visited.insert({estado[0][0],estado[0][1]});
     q.push(estado);
+    vvi actual = q.front();
+    int b = actual[0][0];
+    int a = actual[0][1];
+    int t = actual[0][2];
+    vi cb = actual[1];
+    vi ca = actual[2];
+
     while(!q.empty()){
-        vvi actual = q.front();
-        int b = actual[0][0];
-        int a = actual[0][1];
-        int t = actual[0][2];
-        vi cb = actual[1];
-        vi ca = actual[2];
-        if(b == n-1 && a == 0 && t == 0){
+        actual = q.front();
+        b = actual[0][0];
+        a = actual[0][1];
+        t = actual[0][2];
+        cb = actual[1];
+        ca = actual[2];
+        q.pop();
+
+        if(b == n-1 && a == 0 && cb.size() == ca.size()){
             cout << actual[1].size()-1 << "\n";
             F0(i,actual[1].size()){
                 cout << actual[1][i] + 1 << " ";
@@ -53,7 +62,7 @@ void bfs(int n, vvi& g, set<pi>& visited){
             cout << "\n";
             return;
         }
-        q.pop();
+        
         if(t == 0){
             for(int i = 0; i < g[b].size(); i++){
                 if(visited.count({g[b][i],a}) == 1) continue;
@@ -62,7 +71,7 @@ void bfs(int n, vvi& g, set<pi>& visited){
                 q.push({{g[b][i],a,1},cb,ca});
             }
         }
-        else if(t == 1){
+        if(t == 1){
             for(int i = 0; i < g[a].size(); i++){
                 if(visited.count({b,g[a][i]}) == 1 || g[a][i] == b) continue;
                 visited.insert({b,g[a][i]});
@@ -92,7 +101,7 @@ int main() {
 
     bfs(n, g, visited);
 
-    /* 
+    /*
     F0(i,g.size()){
         F0(j, g[i].size()){
             cout << g[i][j] << " ";
@@ -100,6 +109,7 @@ int main() {
         cout << "\n";
     }
     */
+    
     
     return 0;
 }
