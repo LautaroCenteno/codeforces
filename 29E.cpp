@@ -28,11 +28,11 @@ typedef vector<bool> vbool;
 
 vvi estados;
 
-void bfs(int n, vvi& g, set<pi>& visited){
+void bfs(int n, vvi& g, set<vi>& visited){
     int pasos = 0;
     queue<vvi> q;
     vvi estado = {{0,n-1,0},{0},{n-1}};
-    visited.insert({estado[0][0],estado[0][1]});
+    visited.insert(estado[0]);
     q.push(estado);
     vvi actual = q.front();
     int b = actual[0][0];
@@ -50,7 +50,7 @@ void bfs(int n, vvi& g, set<pi>& visited){
         ca = actual[2];
         q.pop();
 
-        if(b == n-1 && a == 0 && cb.size() == ca.size()){
+        if(b == n-1 && a == 0){
             cout << actual[1].size()-1 << "\n";
             F0(i,actual[1].size()){
                 cout << actual[1][i] + 1 << " ";
@@ -60,21 +60,21 @@ void bfs(int n, vvi& g, set<pi>& visited){
                 cout << actual[2][i] + 1 << " ";
             }
             cout << "\n";
-            return;
+            //return;
         }
         
         if(t == 0){
             for(int i = 0; i < g[b].size(); i++){
-                if(visited.count({g[b][i],a}) == 1) continue;
-                visited.insert({g[b][i],a});
+                if(visited.count({g[b][i],a,1}) == 1) continue;
+                visited.insert({g[b][i],a,1});
                 cb.pb(g[b][i]);
                 q.push({{g[b][i],a,1},cb,ca});
             }
         }
         if(t == 1){
             for(int i = 0; i < g[a].size(); i++){
-                if(visited.count({b,g[a][i]}) == 1 || g[a][i] == b) continue;
-                visited.insert({b,g[a][i]});
+                if(visited.count({b,g[a][i],0}) == 1 || g[a][i] == b) continue;
+                visited.insert({b,g[a][i],0});
                 ca.pb(g[a][i]);
                 q.push({{b,g[a][i],0},cb,ca});
             }
@@ -97,7 +97,7 @@ int main() {
         g[a2-1].pb(a1-1);
     }
 
-    set<pi> visited;
+    set<vi> visited;
 
     bfs(n, g, visited);
 
