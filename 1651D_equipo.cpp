@@ -40,7 +40,8 @@ bool valExists(int x, int y) {  //O(1)
         return false;
     }
 }
- 
+
+/*
 void bfs(long long hash){
     int dist = 300000;
     long long resp;
@@ -55,6 +56,7 @@ void bfs(long long hash){
     }
     RESPUESTAS[hash] = resp;
 }
+*/
 
 void bfs_V2(){
     queue<pi> q;
@@ -69,7 +71,6 @@ void bfs_V2(){
     }
     
     while(!q.empty()){
-        //VERIFICO PRIMERO SI ALGUNO ES RESPUESTA
         if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1 && valExists(q.front().first + 1, q.front().second)) {
             resp = RESPUESTAS[1LL * (q.front().first) * maxI + q.front().second];
             RESPUESTAS[1LL * (q.front().first + 1) * maxI + q.front().second] = resp;
@@ -94,30 +95,11 @@ void bfs_V2(){
             visited.insert(1LL * q.front().first * maxI + (q.front().second - 1));
             q.push({q.front().first, q.front().second - 1});
         }
-        //COMO NO HUBO RESPUESTA, AÑADO A LA COLA LOS ADYACENTES
-        /*
-        if((q.front().first + 1) <= 200000 && visited.count(1LL * (q.front().first + 1) * maxI + q.front().second) != 1) {
-            visited.insert(1LL * (q.front().first + 1) * maxI + q.front().second);
-            q.push({q.front().first + 1, q.front().second});
-        }
-        if((q.front().first - 1) >= 1 && visited.count(1LL * (q.front().first - 1) * maxI + q.front().second) != 1){
-            visited.insert(1LL * (q.front().first - 1) * maxI + q.front().second);
-            q.push({q.front().first - 1, q.front().second});
-        } 
-        if((q.front().second + 1) <= 200000 && visited.count(1LL * q.front().first * maxI + (q.front().second + 1)) != 1){
-            visited.insert(1LL * q.front().first * maxI + (q.front().second + 1));
-            q.push({q.front().first, q.front().second + 1});
-        } 
-        if((q.front().second - 1) >= 1 && visited.count(1LL * q.front().first * maxI + (q.front().second - 1)) != 1){
-            visited.insert(1LL * q.front().first * maxI + (q.front().second - 1));
-            q.push({q.front().first, q.front().second - 1});
-        }
-        */
-
         q.pop();
     }
 }
 
+/*
 void encontrar_respuesta(long long hash){
     long long resp;
     for (const auto& [k,v] : BORDES) {
@@ -131,6 +113,7 @@ void encontrar_respuesta(long long hash){
     }
     RESPUESTAS[hash] = resp;
 }
+*/
  
 void find_nearest_V2(int x, int y) {    //O(1)
     long long reshash;
@@ -172,7 +155,8 @@ void find_nearest_V2(int x, int y) {    //O(1)
     }
     
 }
- 
+
+/*
 std::string find_nearest(int x, int y) {
     for (int i = 0; true; i++)
     {
@@ -198,11 +182,12 @@ std::string find_nearest(int x, int y) {
                 else if (!valExists(x + deltaX, y + deltaY)) {
                     return std::to_string(x + deltaX) + " " + std::to_string(y + deltaY);
                 }
- 
+                
             }
         }
     }
 }
+*/
  
 int main() {
     int amount;
@@ -217,11 +202,7 @@ int main() {
     for (pair<int, int> p: data) {  //O(2.10^5)
         find_nearest_V2(p.first, p.second);
     }
-    /*
-    for (long long i: sinRespuestas){
-        encontrar_respuesta(i);
-    }
-    */
+
     bfs_V2();
  
     for (pair<int, int> p: data) {

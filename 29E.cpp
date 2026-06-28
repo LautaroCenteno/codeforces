@@ -26,77 +26,90 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-void bfs_dist(pi s, vector<string>& g, vvi& g_dist, vector<vbool>& visited){
-    queue<pi> q;
-    visited[s.first][s.second] = true;
-    g_dist[s.first][s.second] = 0;
-    q.push(s);
+vvi estados;
+
+void bfs(int n, vvi& g, set<vi>& visited){
+    int pasos = 0;
+    queue<vvi> q;
+    vvi estado = {{0,n-1,0},{0},{n-1}};
+    visited.insert(estado[0]);
+    q.push(estado);
+    vvi actual = q.front();
+    int b = actual[0][0];
+    int a = actual[0][1];
+    int t = actual[0][2];
+    vi cb = actual[1];
+    vi ca = actual[2];
+
     while(!q.empty()){
-        if((q.front().first + 1) < g.size() && g[q.front().first + 1][q.front().second] != 'T' && !visited[q.front().first + 1][q.front().second]) {
-            g_dist[q.front().first + 1][q.front().second] = g_dist[q.front().first][q.front().second] + 1;
-            visited[q.front().first + 1][q.front().second] = true;
-            q.push({q.front().first + 1, q.front().second});
-        }
-        if((q.front().first - 1) >= 0 && g[q.front().first - 1][q.front().second] != 'T' && !visited[q.front().first - 1][q.front().second]){
-            g_dist[q.front().first - 1][q.front().second] = g_dist[q.front().first][q.front().second] + 1;
-            visited[q.front().first - 1][q.front().second] = true;
-            q.push({q.front().first - 1, q.front().second});
-        } 
-        if((q.front().second + 1) < g[q.front().first].size() && g[q.front().first][q.front().second + 1] != 'T' && !visited[q.front().first][q.front().second + 1]){
-            g_dist[q.front().first][q.front().second + 1] = g_dist[q.front().first][q.front().second] + 1;
-            visited[q.front().first][q.front().second + 1] = true;
-            q.push({q.front().first, q.front().second + 1});
-        } 
-        if((q.front().second - 1) >= 0 && g[q.front().first][q.front().second - 1] != 'T' && !visited[q.front().first][q.front().second - 1]){
-            g_dist[q.front().first][q.front().second - 1] = g_dist[q.front().first][q.front().second] + 1;
-            visited[q.front().first][q.front().second - 1] = true;
-            q.push({q.front().first, q.front().second - 1});
-        }
+        actual = q.front();
+        b = actual[0][0];
+        a = actual[0][1];
+        t = actual[0][2];
+        cb = actual[1];
+        ca = actual[2];
         q.pop();
-    }
-}
 
-void dfs_dist(int i, int j, int pasos, vector<string>& g, vvi& g_dist, vector<vbool>& visited){
-    if(visited[i][j]) return; // aca return false si estoy buscando ciclos
-    if(g[i][j] != 'T'){
-        g_dist[i][j] = pasos;
-        return;
+        if(b == n-1 && a == 0){
+            cout << actual[1].size()-1 << "\n";
+            F0(i,actual[1].size()){
+                cout << actual[1][i] + 1 << " ";
+            }
+            cout << "\n";
+            F0(i,actual[2].size()){
+                cout << actual[2][i] + 1 << " ";
+            }
+            cout << "\n";
+            //return;
+        }
+        
+        if(t == 0){
+            for(int i = 0; i < g[b].size(); i++){
+                if(visited.count({g[b][i],a,1}) == 1) continue;
+                visited.insert({g[b][i],a,1});
+                cb.pb(g[b][i]);
+                q.push({{g[b][i],a,1},cb,ca});
+            }
+        }
+        if(t == 1){
+            for(int i = 0; i < g[a].size(); i++){
+                if(visited.count({b,g[a][i],0}) == 1 || g[a][i] == b) continue;
+                visited.insert({b,g[a][i],0});
+                ca.pb(g[a][i]);
+                q.push({{b,g[a][i],0},cb,ca});
+            }
+        }
     }
-    visited[i][j] = true;
-    pasos++;
-    if((i+1) < g.size() && g[i+1][j] != 'T') dfs_dist((i+1), (j), pasos, g, g_dist, visited);
-    if((i-1) >= 0 && g[i-1][j] != 'T') dfs_dist((i-1), (j), pasos, g, g_dist, visited);
-    if((j+1) < g[i].size() && g[i][j+1] != 'T') dfs_dist((i), (j+1), pasos, g, g_dist, visited);
-    if((j-1) >= 0 && g[i][j-1] != 'T') dfs_dist((i), (j-1), pasos, g, g_dist, visited);
+    cout << -1 << "\n";
 }
-
-void dfs_caminos(int i, int j, int pasos, int& menor_pasos, vector<string>& g, vector<vbool>& visited, vvi& g_dist){
-    if(visited[i][j]) return; // aca return false si estoy buscando ciclos
-    if(g[i][j] == 'E'){
-        if(pasos < menor_pasos) menor_pasos = pasos;
-        return;
-    }
-    visited[i][j] = true;
-    if((i+1) < g.size() && g[i+1][j] != 'T' && g_dist[i+1][j] < g_dist[i][j]) dfs_caminos((i+1), (j), (pasos+1), menor_pasos, g, visited, g_dist);
-    if((i-1) >= 0 && g[i-1][j] != 'T' && g_dist[i-1][j] < g_dist[i][j]) dfs_caminos((i-1), (j), (pasos+1), menor_pasos, g, visited, g_dist);
-    if((j+1) < g[i].size() && g[i][j+1] != 'T' && g_dist[i][j+1] < g_dist[i][j]) dfs_caminos((i), (j+1), (pasos+1), menor_pasos, g, visited, g_dist);
-    if((j-1) >= 0 && g[i][j-1] != 'T' && g_dist[i][j-1] < g_dist[i][j]) dfs_caminos((i), (j-1), (pasos+1), menor_pasos, g, visited, g_dist);
-}
-
-void dfs(int b, int a, int pasos,)
 
 int main() {
     int n, m;
     cin >> n >> m;
-    vvi g(n);
-    int mtemp = m;
-    while(m--){
-        int i, f;
-        cin >> i >> f;
-        g[i].pb(f);
+    vvi g;
+    F0(i,n){
+        g.pb({});
+    }
+    F0(i,m){
+        int a1, a2;
+        cin >> a1 >> a2;
+        g[a1-1].pb(a2-1);
+        g[a2-1].pb(a1-1);
     }
 
-    dfs()
+    set<vi> visited;
+
+    bfs(n, g, visited);
+
+    /*
+    F0(i,g.size()){
+        F0(j, g[i].size()){
+            cout << g[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    */
+    
     
     return 0;
 }

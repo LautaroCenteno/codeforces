@@ -30,8 +30,31 @@ int main() {
     int t;
     cin >> t;
     F0(i,t){
-        string s;
-        cin >> s;
-        
+        int n,x,y,z;
+        cin >> n >> x >> y >> z;
+        int sum1 = 0; //sin AI
+        int h1 = 0;
+        int sum2 = 0; //con AI
+        int h2 = 0;
+
+        while(sum1 < n){
+            sum1+=x;
+            sum1+=y;
+            h1++;
+        }
+
+        while(sum2 < n){
+            sum2+=x;
+            if(h2 < z){
+                sum2+=0;
+            } else{
+                sum2+=y*10;
+            }
+            h2++;
+        }
+
+        int res = min(h1,h2);
+
+        cout << res << "\n";
     }
 }

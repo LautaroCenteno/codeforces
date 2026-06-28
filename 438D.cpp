@@ -27,11 +27,29 @@ typedef vector<bool> vbool;
 #define S second
 
 int main() {
-    int t;
-    cin >> t;
-    F0(i,t){
-        string s;
-        cin >> s;
-        
+    int n,m;
+    cin >> n >> m;
+    vll a(n);
+    F0(i,n) cin >> a[i];
+    F0(i,m){
+        int t;
+        cin >> t;
+        if(t==1){
+            int l, r;
+            ll sum;
+            cin >> l >> r;
+            F0(j,n) sum += a[j];
+            cout << sum << "\n";
+        } else if(t==2){
+            int l,r,x;
+            cin >> l >> r >> x;
+            F0(j,n) cout << a[j] << " ";
+            cout << "\n"
+        } else if(t==3){
+            int k,x;
+            cin >> k >> x;
+            F0(j,n) cout << a[j] << " ";
+            cout << "\n"
+        }
     }
 }
