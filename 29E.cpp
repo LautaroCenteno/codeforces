@@ -42,15 +42,25 @@ void bfs(int n, vvi& g, set<vi>& visited){
     vi ca = actual[2];
 
     while(!q.empty()){
+        //cout << "ENTRA en while" << "\n";
         actual = q.front();
         b = actual[0][0];
+        //cout << "b = " << b << "\n";
         a = actual[0][1];
+        //cout << "a = " << a << "\n";
         t = actual[0][2];
+        //cout << "t = " << t << "\n";
         cb = actual[1];
+        //F0(i,cb.size()) cout << "cb = " << cb[i] << " ";
+        //cout << "\n";
         ca = actual[2];
+        //F0(i,ca.size()) cout << "ca = " << ca[i] << " ";
+        //cout << "\n";
         q.pop();
+        //cout << "q.pop" << "\n";
 
-        if(b == n-1 && a == 0){
+        if(b == n-1 && a == 0 && t == 0){
+            //cout << "ENTRA al if RETURN" << "\n";
             cout << actual[1].size()-1 << "\n";
             F0(i,actual[1].size()){
                 cout << actual[1][i] + 1 << " ";
@@ -60,26 +70,35 @@ void bfs(int n, vvi& g, set<vi>& visited){
                 cout << actual[2][i] + 1 << " ";
             }
             cout << "\n";
-            //return;
+            return;
         }
         
         if(t == 0){
+            //cout << "ENTRA al if (t==0)" << "\n";
             for(int i = 0; i < g[b].size(); i++){
+                //cout << "g[b][i] = " << g[b][i] << "\n";
                 if(visited.count({g[b][i],a,1}) == 1) continue;
+                //cout << "Estado NO visitado" << "\n";
                 visited.insert({g[b][i],a,1});
-                cb.pb(g[b][i]);
-                q.push({{g[b][i],a,1},cb,ca});
+                vi cb_copy = cb;
+                cb_copy.pb(g[b][i]);
+                q.push({{g[b][i],a,1},cb_copy,ca});
             }
         }
         if(t == 1){
+            //cout << "ENTRA al if (t==1)" << "\n";
             for(int i = 0; i < g[a].size(); i++){
+                //cout << "g[a][i] = " << g[a][i] << "\n";
                 if(visited.count({b,g[a][i],0}) == 1 || g[a][i] == b) continue;
+                //cout << "Estado NO visitado" << "\n";
                 visited.insert({b,g[a][i],0});
-                ca.pb(g[a][i]);
-                q.push({{b,g[a][i],0},cb,ca});
+                vi ca_copy = ca;
+                ca_copy.pb(g[a][i]);
+                q.push({{b,g[a][i],0},cb,ca_copy});
             }
         }
     }
+    //cout << "SALE del while" << "\n";
     cout << -1 << "\n";
 }
 

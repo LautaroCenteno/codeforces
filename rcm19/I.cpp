@@ -71,16 +71,14 @@ int main(){
 
     i++;
     j++;
-    cont = 0;
+    //cont = 0;
     /*
     for(int k = i; k <= j; k++){
         if(s[k] == 'Z') cont++; 
     }
     */
-    if(s[i-1] == 'Z' && s[i] == 'W') cont--;
-    if(s[i-1] == 'W' && s[i] == 'Z') cont++;
-    if(s[j-1] == 'Z' && s[j] == 'W') cont--;
-    if(s[j-1] == 'W' && s[j] == 'Z') cont++;
+    if(s[i-1] == 'Z' && s[j] == 'W') cont--;
+    if(s[i-1] == 'W' && s[j] == 'Z') cont++;
     
 
     while(j<2*n){
@@ -90,16 +88,14 @@ int main(){
         //cout << "entonces res = " << res << "\n";
         i++;
         j++;
-        cont = 0;
+        //cont = 0;
         /*
         for(int k = i; k <= j; k++){
             if(s[k] == 'Z') cont++; 
         }
         */
-        if(s[i-1] == 'Z' && s[i] == 'W') cont--;
-        if(s[i-1] == 'W' && s[i] == 'Z') cont++;
-        if(s[j-1] == 'Z' && s[j] == 'W') cont--;
-        if(s[j-1] == 'W' && s[j] == 'Z') cont++;
+        if(s[i-1] == 'Z' && s[j] == 'W') cont--;
+        if(s[i-1] == 'W' && s[j] == 'Z') cont++;
     }
     
     cout << res << "\n";

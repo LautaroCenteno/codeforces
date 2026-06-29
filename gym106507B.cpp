@@ -32,6 +32,7 @@ int main() {
     F0(i,t){
         int n; cin >> n;
         vi a(n); 
+        int ultimo;
         F0(i,n){
             cin >> f;
             if(!a.empty){
@@ -40,6 +41,7 @@ int main() {
                 pi pf = {f, -1}
             }
             a.pb(pf)
+            ultimo = f
         } 
 
         /*
