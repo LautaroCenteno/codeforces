@@ -153,7 +153,7 @@ int main() {
             }
         }
         if(cordV.size() > 0){
-            if(cordV[0] > 0 && cordV[0] < 5 && h[cordV[0]] && h[cordV[0]-1] && h[cordV[0]+1] && cant_true(h) == 4){
+            if(cordV[0] > 0 && cordV[0] < 5 && v[cordV[0]] && v[cordV[0]-1] && v[cordV[0]+1] && cant_true(h) == 4){
                 res = true;
             }
         }
@@ -169,7 +169,7 @@ int main() {
                 return 0;
             }
         }else if(cordV.size() > 0){
-            if(cordV[0] > 0 && cordV[0] < 5 && h[cordV[0]] && h[cordV[0]-1] && h[cordV[0]+1]){
+            if(cordV[0] > 0 && cordV[0] < 5 && v[cordV[0]] && v[cordV[0]-1] && v[cordV[0]+1]){
                 cout << "can fold";
                 return 0;
             }else{
