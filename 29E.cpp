@@ -26,49 +26,53 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-vvi estados;
+bool visited[500][500][2] = {false};
+vi caminos[500][500][2];
 
-void bfs(int n, vvi& g, set<vi>& visited){
+void bfs(int n, vvi& g){
     int pasos = 0;
-    queue<vvi> q;
-    vvi estado = {{0,n-1,0},{0},{n-1}};
-    visited.insert(estado[0]);
+    queue<vi> q;
+    vi estado = {0,n-1,0};
     q.push(estado);
-    vvi actual = q.front();
-    int b = actual[0][0];
-    int a = actual[0][1];
-    int t = actual[0][2];
-    vi cb = actual[1];
-    vi ca = actual[2];
+    vi actual = q.front();
+    int b = actual[0];
+    int a = actual[1];
+    int t = actual[2];
+    visited[b][a][t] = true;
 
     while(!q.empty()){
         //cout << "ENTRA en while" << "\n";
         actual = q.front();
-        b = actual[0][0];
+        b = actual[0];
         //cout << "b = " << b << "\n";
-        a = actual[0][1];
+        a = actual[1];
         //cout << "a = " << a << "\n";
-        t = actual[0][2];
+        t = actual[2];
         //cout << "t = " << t << "\n";
-        cb = actual[1];
-        //F0(i,cb.size()) cout << "cb = " << cb[i] << " ";
-        //cout << "\n";
-        ca = actual[2];
-        //F0(i,ca.size()) cout << "ca = " << ca[i] << " ";
         //cout << "\n";
         q.pop();
         //cout << "q.pop" << "\n";
 
         if(b == n-1 && a == 0 && t == 0){
             //cout << "ENTRA al if RETURN" << "\n";
-            cout << actual[1].size()-1 << "\n";
-            F0(i,actual[1].size()){
-                cout << actual[1][i] + 1 << " ";
+            vi v = {b,a,t};
+            //cout << "v = " << v[0] << " " << v[1] << " " << v[2] << "\n";
+            vi cb = {};
+            vi ca= {a+1};
+            while(v != estado){
+                //cout << "ENTRA al while" << "\n";
+                v=caminos[v[0]][v[1]][v[2]];
+                //cout << "v = " << v[0] << " " << v[1] << " " << v[2] << "\n";
+                if(v[2] == 1) cb.pb(v[0]+1);
+                if(v[2] == 0) ca.pb(v[1]+1);
             }
+            cb.pb(v[0]+1);
+            reverse(cb.begin(), cb.end());
+            reverse(ca.begin(), ca.end());
+            cout << cb.size()-1 << "\n";
+            F0(i,cb.size()) cout << cb[i] << " ";
             cout << "\n";
-            F0(i,actual[2].size()){
-                cout << actual[2][i] + 1 << " ";
-            }
+            F0(i,ca.size()) cout << ca[i] << " ";
             cout << "\n";
             return;
         }
@@ -77,24 +81,22 @@ void bfs(int n, vvi& g, set<vi>& visited){
             //cout << "ENTRA al if (t==0)" << "\n";
             for(int i = 0; i < g[b].size(); i++){
                 //cout << "g[b][i] = " << g[b][i] << "\n";
-                if(visited.count({g[b][i],a,1}) == 1) continue;
+                if(visited[g[b][i]][a][1]) continue;
                 //cout << "Estado NO visitado" << "\n";
-                visited.insert({g[b][i],a,1});
-                vi cb_copy = cb;
-                cb_copy.pb(g[b][i]);
-                q.push({{g[b][i],a,1},cb_copy,ca});
+                visited[g[b][i]][a][1] = true;
+                caminos[g[b][i]][a][1] = {b,a,t};
+                q.push({g[b][i],a,1});
             }
         }
         if(t == 1){
             //cout << "ENTRA al if (t==1)" << "\n";
             for(int i = 0; i < g[a].size(); i++){
                 //cout << "g[a][i] = " << g[a][i] << "\n";
-                if(visited.count({b,g[a][i],0}) == 1 || g[a][i] == b) continue;
+                if(visited[b][g[a][i]][0] || g[a][i] == b) continue;
                 //cout << "Estado NO visitado" << "\n";
-                visited.insert({b,g[a][i],0});
-                vi ca_copy = ca;
-                ca_copy.pb(g[a][i]);
-                q.push({{b,g[a][i],0},cb,ca_copy});
+                visited[b][g[a][i]][0] = true;
+                caminos[b][g[a][i]][0] = {b,a,t};
+                q.push({b,g[a][i],0});
             }
         }
     }
@@ -116,9 +118,9 @@ int main() {
         g[a2-1].pb(a1-1);
     }
 
-    set<vi> visited;
+    bool visited[500][500][2] = {false};
 
-    bfs(n, g, visited);
+    bfs(n, g);
 
     /*
     F0(i,g.size()){
