@@ -1,0 +1,58 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<vvi> vvvi;
+typedef long long ll;
+typedef vector<ll> vll;
+typedef vector<vll> vvll;
+typedef pair<int,int> pi;
+typedef pair<ll,ll> pll;
+typedef pair<double,double> pd;
+typedef vector<pi> vpi;
+typedef vector<pll> vpll;
+typedef vector<bool> vbool;
+ 
+#define pb push_back
+#define eb emplace_back
+#define mp make_pair
+#define forall(it,s) for(auto it = s.begin(); it != s.end(); ++it)
+#define F0(i,n) for(int i = 0; i < n; i++)
+#define F1(i,n) for(int i = 1; i <= n; i++)
+#define REP(i,a,b) for(int i = a; i <= b; i++)
+#define F first
+#define S second
+
+int main() {
+    int n; cin >> n;
+    vi v(n);
+    
+    F0(i,n) cin >> v[i];
+    vi sorted = v;
+    sort(sorted.begin(),sorted.end());
+    int cont = 0;
+    //int actual = v[0];
+    F0(i,n){
+        if(cont>2){
+            cout << "NO";
+            return 0;
+        }
+        if(v[i] != sorted[i]){
+            //cout << "entra\n";
+            cont++;
+        }
+        //actual = v[i];
+        
+    }
+    if(cont>2){
+        cout << "NO";
+        return 0;
+    }
+    //cout << cont << "\n";
+    cout << "YES";
+
+    return 0;
+}
