@@ -26,106 +26,109 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-void bfs(int n, int k, vvi& g, vi& tipos, vbool& visited){
-    queue<int> q;
-    //cout << "pushea 0" << "\n";
-    q.push(0);
-    visited[0] = true;
-    vi distancia(n);
-    //cout << "distancia[0] = 0" << "\n";
-    distancia[0] = 0;
-    vi res(k, -1);
-    //cout << "res[tipos[0]-1] = distancia[0];" << "\n";
-    res[tipos[0]] = distancia[0];
-    /*
-    F0(i,res.size()){
-        cout << res[i] << " ";
-    }
-    */
-    //cout << "\n";
+vvi estados;
+
+void bfs(int n, vvi& g, set<vi>& visited){
+    int pasos = 0;
+    queue<vvi> q;
+    vvi estado = {{0,n-1,0},{0},{n-1}};
+    visited.insert(estado[0]);
+    q.push(estado);
+    vvi actual = q.front();
+    int b = actual[0][0];
+    int a = actual[0][1];
+    int t = actual[0][2];
+    vi cb = actual[1];
+    vi ca = actual[2];
 
     while(!q.empty()){
-        int actual = q.front();
-        //cout << "actual = "  << actual << "\n";
-        //cout << actual << " ";
+        //cout << "ENTRA en while" << "\n";
+        actual = q.front();
+        b = actual[0][0];
+        //cout << "b = " << b << "\n";
+        a = actual[0][1];
+        //cout << "a = " << a << "\n";
+        t = actual[0][2];
+        //cout << "t = " << t << "\n";
+        cb = actual[1];
+        //F0(i,cb.size()) cout << "cb = " << cb[i] << " ";
+        //cout << "\n";
+        ca = actual[2];
+        //F0(i,ca.size()) cout << "ca = " << ca[i] << " ";
         //cout << "\n";
         q.pop();
-        F0(i,g[actual].size()){
-            //cout << "proceso vecino = "  << g[actual][i] << "\n";
-            if(visited[g[actual][i]]) continue;
-            //cout << "vecino todavia no visitado :)" << "\n";
-            distancia[g[actual][i]] = distancia[actual] + 1;
-            //cout << "distancia de vecino = "  << distancia[g[actual][i]] << "\n";
-            visited[g[actual][i]] = true;
-            //cout << "actualizo estado de visita de vecino a = "  << visited[g[actual][i]] << "\n";
-            //cout << "g[actual][i] = "  << g[actual][i] << "\n";
-            //cout << "tipos[g[actual][i]] = "  << tipos[g[actual][i]] << "\n";
-            // cout << "res[tipos[g[actual][i]]] = "  << res[tipos[g[actual][i]]] << "\n";
-            if(res[tipos[g[actual][i]]] < distancia[g[actual][i]]){
-                //cout << "ENTRA al bucle res" << "\n";
-                res[tipos[g[actual][i]]] = distancia[g[actual][i]];
-                //cout << "res[tipos[g[actual][i]]] AHORA es igual a: "  << distancia[g[actual][i]] << "\n";
+        //cout << "q.pop" << "\n";
+
+        if(b == n-1 && a == 0 && t == 0){
+            //cout << "ENTRA al if RETURN" << "\n";
+            cout << actual[1].size()-1 << "\n";
+            F0(i,actual[1].size()){
+                cout << actual[1][i] + 1 << " ";
             }
-            //cout << "pusheo vecino: " << g[actual][i] << "\n";
-            q.push(g[actual][i]);
+            cout << "\n";
+            F0(i,actual[2].size()){
+                cout << actual[2][i] + 1 << " ";
+            }
+            cout << "\n";
+            return;
+        }
+        
+        if(t == 0){
+            //cout << "ENTRA al if (t==0)" << "\n";
+            for(int i = 0; i < g[b].size(); i++){
+                //cout << "g[b][i] = " << g[b][i] << "\n";
+                if(visited.count({g[b][i],a,1}) == 1) continue;
+                //cout << "Estado NO visitado" << "\n";
+                visited.insert({g[b][i],a,1});
+                vi cb_copy = cb;
+                cb_copy.pb(g[b][i]);
+                q.push({{g[b][i],a,1},cb_copy,ca});
+            }
+        }
+        if(t == 1){
+            //cout << "ENTRA al if (t==1)" << "\n";
+            for(int i = 0; i < g[a].size(); i++){
+                //cout << "g[a][i] = " << g[a][i] << "\n";
+                if(visited.count({b,g[a][i],0}) == 1 || g[a][i] == b) continue;
+                //cout << "Estado NO visitado" << "\n";
+                visited.insert({b,g[a][i],0});
+                vi ca_copy = ca;
+                ca_copy.pb(g[a][i]);
+                q.push({{b,g[a][i],0},cb,ca_copy});
+            }
         }
     }
-    /*
-    F0(i, distancia.size()){
-        cout << distancia[i] << " ";
-    }
-    cout << "\n";
-    */
-    
-    F0(i, res.size()){
-        cout << res[i] << " ";
-    }
-    cout << "\n";
+    //cout << "SALE del while" << "\n";
+    cout << -1 << "\n";
 }
 
 int main() {
-    int n, m, k;
-    cin >> n >> m >> k;
-    vi tipos = {};
-    vvi g(n);
-    F0(i,n) g[i] = {};
-    F0(i, n){
-        int t;
-        cin >> t;
-        tipos.pb(t-1);
+    int n, m;
+    cin >> n >> m;
+    vvi g;
+    F0(i,n){
+        g.pb({});
     }
-    F0(i, m){
-        int a, b;
-        cin >> a >> b;
-        g[a-1].pb(b-1);
-        g[b-1].pb(a-1);
+    F0(i,m){
+        int a1, a2;
+        cin >> a1 >> a2;
+        g[a1-1].pb(a2-1);
+        g[a2-1].pb(a1-1);
     }
 
-    vbool visited(n);
+    set<vi> visited;
+
+    bfs(n, g, visited);
 
     /*
     F0(i,g.size()){
-        F0(j,g[i].size()){
+        F0(j, g[i].size()){
             cout << g[i][j] << " ";
         }
         cout << "\n";
     }
     */
     
-    /*
-    F0(i,tipos.size()){
-        cout << tipos[i] << " ";
-    }
-    cout << "\n";
-    */
-
-    bfs(n,k,g,tipos,visited);
-
-    /*
-    F0(i, visited.size()){
-        cout << visited[i] << " ";
-    }
-    */
-
+    
     return 0;
 }
