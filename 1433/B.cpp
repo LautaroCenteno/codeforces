@@ -25,21 +25,27 @@ typedef vector<bool> vbool;
 #define REP(i,a,b) for(int i = a; i <= b; i++)
 #define F first
 #define S second
-vi funcion(vi& visited, vi& v, int n, int c){
-    if(v.size() == n) return v;
-    
-}
 
 int main() {
-    int t;
-    cin >> t;
+    int t; cin >> t;
     while(t--){
-        int n;
-        cin >> n;
-        vi v;
-        vbool usado;
-        
-        
+        int n; cin >> n;
+        vi v(n);
+        F0(i,n) cin >> v[i];
+        int l = 0;
+        int r = n;
+        int res = 0;
+        F0(i,n){if(v[i] == 1){l = i; break;}}
+        for(int i = n-1; i > -1; i--){
+            if(v[i] == 1){
+                r = i;
+                break;
+            }
+        }
+        for(int i = l; i<=r; i++){
+            if(v[i] == 0) res++;
+        }
+        cout << res << "\n";
     }
 
     return 0;

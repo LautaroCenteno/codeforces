@@ -26,6 +26,13 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
+vvi caminos;
+
+void dfs(vvi& g, vbool& visited){
+    
+}
+
+
 int main() {
     int n;
     cin >> n;
@@ -52,7 +59,10 @@ int main() {
         cout << g1[i][0] << g1[i][1] << g1[i][2] << g1[i][3] << "\n";
     }
     */
-
+    vbool visited1;
+    vbool visited2;
+    dfs(g1,visited1);
+    
 
     return 0;
 }
