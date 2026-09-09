@@ -26,17 +26,17 @@ typedef vector<bool> vbool;
 #define F first
 #define S second
 
-int bfs(int a, vvi& g, vbool visited){
+unordered_map<int,int> bfs(int a, vvi& g, vbool visited){
+    unordered_map<int,int> res;
     queue<int> q;
     queue<int> q2;
     q.push(a);
     q2.push(1);
     
-    int res = 0;
     while(!q.empty()){
         int num = q2.front();
-        if(num > res) res = num;
         int actual = q.front();
+        res[actual] = num;
         //cout << actual << "\n";
         //cout << num << "\n";
         visited[actual] = true;
@@ -57,20 +57,30 @@ int bfs(int a, vvi& g, vbool visited){
 int main() {
     int n; cin >> n;
     vvi g(n);
+    vi camino(n);
+    F0(i,n-1){
+        int x; int y; cin >> x >> y;
+        g[x-1].pb(y-1);
+        g[y-1].pb(x-1);
+    }
     F0(i,n){
-        int p; cin >> p;
-        if(p != -1){
-            g[p-1].pb(i);
-        }
+        int a; cin >> a;
+        camino[i] = a-1;
     }
     vbool visited(n);
-    int res = 0;
+    bool res = true;
 
-    F0(i,n){
-        int j = bfs(i, g, visited);
-        if (j > res) res = j;
+    unordered_map<int,int> map = bfs(0, g, visited);
+
+    if(camino[0] == 0) res = res && true;
+
+    F1(i,n-1){
+        if(map[camino[i]] >= map[camino[i-1]]) res = res && true;
+        else res = res && false;
     }
-    cout << res << "\n";
+
+    if(res) cout << "Yes" << "\n";
+    else cout << "No" << "\n";
     
     return 0;
 }
