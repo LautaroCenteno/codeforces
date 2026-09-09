@@ -60,7 +60,11 @@ int main() {
                 num++;
             }
         }
-        vvi dp(g.size() {0,0})
+        vvi dp(g.size() {0,0});
+        //dp[0][0] = 0
+        //dp[0][1] = 0
+
+        
         /*
         F0(i,g.size()){
             F0(j,g[i].size())

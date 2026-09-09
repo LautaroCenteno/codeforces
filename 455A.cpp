@@ -27,7 +27,22 @@ typedef vector<bool> vbool;
 #define S second
 
 int main() {
-    int n; cin >> n;
-    vi v(n);
-    F0(i,n) cin >> v[i]; 
+    int n;cin >> n;
+    vll v(n);
+    vll cant(100005);;
+    ll maxV = 0;
+    F0(i,n){
+        cin >> v[i];
+        cant[v[i]]++;
+        if(v[i] > maxV) maxV = v[i];
+    }
+    vll dp(maxV+1);
+    dp[0] = 0;
+    dp[1] = cant[1];
+    for(ll i = 2; i <= maxV; i++){
+        dp[i] = max(cant[i]*i + dp[i-2], dp[i-1]);
+    }
+    cout << dp[maxV];
+
+    return 0;
 }
