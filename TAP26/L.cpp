@@ -30,24 +30,32 @@ int main() {
     int n; cin >> n;
     int m; cin >> m;
     vpi hash(m+1, {-1,-1});
+    int cant = 0;
     vi v(n); 
     F0(i,n){
         cin >> v[i]; 
         if(hash[v[i]] == mp(-1,-1)) hash[v[i]] = mp(i,i);
         if (i > hash[v[i]].S) hash[v[i]].S = i;
     } 
-    vi orden = v;
-    sort(orden.begin(), orden.end());
+    vi orden;
+    F0(i,m+1) if(hash[i] != mp(-1,-1)){cant++;orden.pb(i)}
     if(n < 3){
         cout << 1 << "\n";
         return 0;
     }
     int res = 1;
     int ord;
-    if(hash[orden[0]].F < hash[orden[1]].S) ord = 0;
-    else ord = 1;
+    for(int i = 1; i < n; i++){
+        if(hash[orden[i]].S < hash[orden[i-1]].F && hash[orden[i]].F <= hash[orden[i-1]].S){
+            ord = 1;
+        }
+        if(hash[orden[i]].S < hash[orden[i-1]].F && hash[orden[i]].F <= hash[orden[i-1]].S){
+            ord = 0;
+        }
+
+    }
     for(int i = 2; i < n; i++){
-        if(ord = 0){
+        if(ord == 0){
             if(hash[orden[i]].S < hash[orden[i-1]].F){
                 res++;
                 ord = 1;
@@ -59,9 +67,6 @@ int main() {
             }
         }
     }
-    F0(i,n) cout << orden[i] << " ";
-    cout << "\n"; 
-    if(m > 5) cout << hash[5].F << " " << hash[5].S << "\n";
-    cout << n << " " << res << "\n";
+    cout << cant << " " << res << "\n";
     return 0;
 }
