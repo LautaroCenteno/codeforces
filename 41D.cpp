@@ -29,22 +29,88 @@ typedef vector<bool> vbool;
 int n,m,k;
 int mINF = -1e9;
 
-void f(int x, int y, int r, vector<string>& g){
-    if(x = 0){
-        if
+int f(int x, int y, int r, vector<string>& g, vector<vvi>& dp){
+    int c = g[y][x] - '0';
+    if(y == 0){
+        if(c % (k+1) == r){
+            dp[x][y][r] = c;
+            return c;
+        } 
+        else{
+            dp[x][y][r] = mINF;
+            return mINF;
+        }
     }
-
-
-    if(y == m-1) res = f(x-1,y-1)
+    if(dp[x][y][r] != -1) return dp[x][y][r];
+    int res = mINF;
+    int nuevo_r = ((r - c) % (k+1) + (k+1)) % (k+1);
+    if(x == 0) res = c + f(x+1,y-1,nuevo_r,g,dp);
+    else if(x == m-1) res = c + f(x-1,y-1,nuevo_r,g,dp);
+    else res = max(c + f(x+1,y-1,nuevo_r,g,dp), c + f(x-1,y-1,nuevo_r,g,dp));
+    dp[x][y][r] = res;
+    return res;
 }
 
 int main() {
     cin >> n >> m >> k;
     vector<string> g(n);
     for(int i = n-1; i > -1; i--) cin >> g[i];
-    vector<vvi> dp(n, vvi(m, vi(k)));
+    vector<vvi> dp(m, vvi(n, vi(k+1, -1)));
     int maximo = mINF;
-    F0(i,m) maximo = max(maximo, f(n-1,i,0));
-    cout << maximo << "\n";
+    F0(i,m) maximo = max(maximo, f(i,n-1,0,g,dp));
+    vi camino;
+    int va = mINF;
+    int pa = -1;
+    int ra = 0;
+    if(maximo < 0) cout << -1 << "\n";
+    else{
+        F0(i,m){
+            if(dp[i][n-1][0] > va){
+                va = dp[i][n-1][0];
+                pa = i;
+            }
+        } 
+        int ca = g[n-1][pa] - '0';
+        ra = ((ra - ca) % (k+1) + (k+1)) % (k+1);
+        camino.pb(pa);
+        for(int i = n-2; i > -1; i--){
+            if(pa == 0){
+                ca = g[i][pa+1] - '0';
+                va = dp[pa+1][i][ra];
+                pa = pa+1;
+            }
+            else if(pa == m-1){
+                ca = g[i][pa-1] - '0';
+                va = dp[pa-1][i][ra];
+                pa = pa-1;
+            }
+            else{
+                if(dp[pa-1][i][ra] > dp[pa+1][i][ra]){
+                    ca = g[i][pa-1] - '0';
+                    va = dp[pa-1][i][ra];
+                    pa = pa-1;
+                }
+                else{
+                    ca = g[i][pa+1] - '0';
+                    va = dp[pa+1][i][ra];
+                    pa = pa+1;
+                }
+            }
+            ra = ((ra - ca) % (k+1) + (k+1)) % (k+1);
+            camino.pb(pa);
+        }
+        reverse(camino.begin(),camino.end());
+        string camino_res = "";
+        cout << maximo << "\n";
+        cout << camino[0]+1 << "\n";
+        F1(i,camino.size()-1){
+            if(camino[i-1] < camino[i]) camino_res += 'R';
+            else camino_res += 'L';
+        }
+        cout << camino_res;
+        cout << "\n";
+    }
+    
+    
     return 0;
 }
